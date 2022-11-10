@@ -1,19 +1,39 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Header from '../components/Header'
-import { FaPhoneAlt, FaUser } from 'react-icons/fa'
+import { FaEdit } from 'react-icons/fa'
+import AppContext from '../context/Context';
+import { useNavigate } from 'react-router-dom';
 
 
 const CreatePoll = () => {
 
-    const [date, setDate] = useState('');
     const [question, setQuestion] = useState('');
-    const [answer, setAnswer]= useState('');
+    const {tokens} = useContext(AppContext)
 
-    const handleSubmit = (e) => {
+    const navigate = useNavigate()
+    
+
+    const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log(date);
-        console.log(question);
-        console.log(answer);
+
+        const response = await fetch(`http://127.0.0.1:8000/api/create-question/`, {
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + String(tokens.access)
+              },
+              body:JSON.stringify({
+                "question":question
+              })
+        })
+
+        const data = await response.json()
+        if(response.status === 201){
+            alert("poll created successfully")
+            navigate("/")
+        }
+        
+        
     }   
     return (
     
@@ -22,29 +42,12 @@ const CreatePoll = () => {
             <div className='w-full bg-gray-300 p-4 rounded-lg shadow-sm h-400'>
             <form onSubmit={handleSubmit}>
                 
+            
             <div className="relative mb-4">
-                <span className="absolute flex inset-y-0 items-center pl-4 text-gray-400"><FaPhoneAlt /></span>
+                <span style={{fontSize:"20px"}} className="absolute  flex inset-y-0 items-center pl-4 text-gray-400"><FaEdit /></span>
                 <input 
-                onChange={event => setDate(event.target.value)}
-                placeholder='Date'
-                type='date'
-                required
-                    className='outline-none
-                    bg-gray-200
-                    placeholder-gray-500
-                    text-black
-                    pl-9 pr-4 py-2
-                    w-full
-                    rounded-lg
-                    transition 
-                    focus:ring-2 
-                    focus:ring-blue-300' />
-            </div>
-
-            <div className="relative mb-4">
-                <span className="absolute flex inset-y-0 items-center pl-4 text-gray-400"><FaPhoneAlt /></span>
-                <input 
-                onChange={event => setQuestion(event.target.value)}
+                onChange={(e) => setQuestion(e.target.value)}
+                name='question'
                 placeholder='Question'
                 type='text'
                 required
@@ -52,33 +55,16 @@ const CreatePoll = () => {
                     bg-gray-200
                     placeholder-gray-500
                     text-black
-                    pl-9 pr-4 py-2
+                    pl-9 pr-4 py-4
                     w-full
+                    h-20
                     rounded-lg 
                     transition 
                     focus:ring-2 
                     focus:ring-blue-300' />
             </div>
-            <div className="relative mb-4">
-                <span className="absolute flex inset-y-0 items-center pl-4 text-gray-400"></span>
-                <textarea 
-                onChange={event => setAnswer(event.target.value)}
-                placeholder='Answer'
-                type='text'
-                required
-                    className='outline-none
-                    rows="8"
-                    bg-gray-200
-                    placeholder-gray-500
-                    text-black
-                    pl-9 pr-4 py-2
-                    w-full
-                    rounded-lg 
-                    transition 
-                    focus:ring-2 
-                    focus:ring-blue-300' />
-            </div>
-            <button className='w-1/2 bg-blue-400 pt-4 pb-4 rounded-lg text-3xl text-white'>
+            
+            <button type="submit" className='w-1/2 bg-blue-600 hover:bg-blue-400 pt-3 pb-3 rounded-lg text-3xl text-white'>
                  SUBMIT
             </button>
 

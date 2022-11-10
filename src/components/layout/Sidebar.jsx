@@ -12,15 +12,15 @@ const Sidebar = () => {
 
   // const [adminLinks, setAdminLinks] = useState([])
   const {user} = useContext(AppContext)
-  console.log(user.admin)
-  const isAdmin = user.admin ? 'admin' : 'user'
+  // console.log(user.admin)
+  const isAdmin = user.is_staff ? 'admin' : 'user'
 
   // const userIsAdmin = {
   //   name: 'Amekwi',  
   //   role: isAdmin,
   // }
   const userLinks = orderLinks.filter(orderLink => orderLink.role === isAdmin);
-  console.log(userLinks)
+  
 
 
   return (

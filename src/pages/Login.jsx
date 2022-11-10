@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import png from '../png.png'
 import axios from "axios";
 import { useContext } from 'react';
@@ -77,6 +77,9 @@ const Login = () => {
                     transition 
                     focus:ring-2 
                     focus:ring-blue-300' />
+                    </div>
+                    <div className="relative mb-4">
+                        <p className='text-white ont-semibold'>Don't have an account? <Link className='text-blue-400' to="/signup">Sign Up</Link></p>
                     </div>
                     {
                       !isLoading ?

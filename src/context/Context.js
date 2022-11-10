@@ -1,4 +1,4 @@
-import {createContext, useState, useEffect, Children} from 'react'
+import {createContext, useState, useEffect} from 'react'
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,9 @@ export const AppContextProvider = ({children}) => {
     const [tokens, setTokens] = useState(() => onLoadTokens);
     const [isloading, setIsLoading] = useState(null)
     const [error, setError] = useState(null);
+    const [polls, setPolls] = useState([])
+    const [forums, setForums] = useState([])
+
 
     const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ export const AppContextProvider = ({children}) => {
 
         if (username && email && password1 && password2){
             if(password1 === password2){
-                const response = await fetch("http://127.0.0.1:8000/api-auth/signup/", {
+                const response = await fetch("http://127.0.0.1:8000/api/signup/", {
                     method:'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -44,24 +47,18 @@ export const AppContextProvider = ({children}) => {
                           "email":email,
                           "county":county,
                           "association":association,
-                          "password":password1  
+                          "password1":password1,
+                          "password2":password1   
                             
                         })
                     })
                 response ? setIsLoading(false) : setIsLoading(true)
                 const data = await response.json()
                 //console.log(data)
-                if(response.status === 201){
+                if(response.status === 200){
                     alert(`${username}, You were registered successfully`)
                     navigate("/login")
-                }else if(response.status === 400){
-                    if(data.username){
-                        alert(data.username[0])
-                    }else if(data.email){
-                        alert(data.email[0])
-                    }else{
-                        alert("error occured please check your inputs")
-                    }
+                    
                 }else{
                     alert("error occured")
                 }
@@ -85,7 +82,7 @@ export const AppContextProvider = ({children}) => {
         setIsLoading(true)
         //console.log(isloading)
        try {
-        const response = await fetch("http://127.0.0.1:8000/api-auth/token/", {
+        const response = await fetch("http://127.0.0.1:8000/api/token/", {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,7 +98,7 @@ export const AppContextProvider = ({children}) => {
         setUser(jwt_decode(data.access))
         localStorage.setItem("tokens", JSON.stringify(data))
 
-        if(user.admin === true){
+        if(user.is_staff === true){
 
             navigate("/")
         }else{
@@ -122,6 +119,7 @@ export const AppContextProvider = ({children}) => {
        
     }
 
+    //logging out a user 
     const logoutUser = () => {
         setTokens(null)
         setUser(null)
@@ -129,10 +127,56 @@ export const AppContextProvider = ({children}) => {
         navigate('/login')
     }
 
+    //getting all questions/polls
+    const getPolls = async () => {
+        const response = await fetch("http://127.0.0.1:8000/api/questions/",{
+          method:"GET",
+          headers: {
+            "Authorization": "Bearer " + String(tokens.access)
+          }
+        })
+    
+        const data = await response.json()
+        if(response.status === 200) {
+          setPolls([...data])
+          
+        }else if(response.statusText === "Unauthorized"){
+          logoutUser();
+        }
+      }
+
+      const getForums = async () => {
+        const response = await fetch("http://127.0.0.1:8000/api/forums/",{
+          method:"GET",
+          headers: {
+            "Authorization": "Bearer " + String(tokens.access)
+          }
+        })
+    
+        const data = await response.json()
+        if(response.status === 200) {
+          setForums([...data])
+          
+        }else if(response.statusText === "Unauthorized"){
+          logoutUser();
+        }
+      }
+
+      useEffect(() => {
+        getPolls()
+      }, [polls])
+
+      useEffect(() => {
+        
+        getForums()
+      }, [forums])
+
+      
+
 
 
     const contextData = {
-        registerUser, loginUser, user, tokens, logoutUser, isloading
+        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums
     }
     return (
         <AppContext.Provider value={contextData}>

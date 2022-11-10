@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import AppContext from '../context/Context';
 import { useContext } from 'react';
+import { Link } from "react-router-dom";
 
 export default function SignUp() {
     const router = useNavigate();
@@ -186,6 +187,9 @@ export default function SignUp() {
                                 />
                             </div>
                         </div>
+                        <div className="relative mb-4">
+                        <p className='text-grey-600 font-semibold pt-4 ml-2'>Already Registered? <Link className='text-blue-500' to="/login">Log In</Link></p>
+                    </div>
                         <button
                             className="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50 mt-3"
                             type="submit"
