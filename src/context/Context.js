@@ -198,6 +198,10 @@ export const AppContextProvider = ({children}) => {
 
       })
       const data = await response.json()
+     if(response.status === 200){
+      alert('commented')
+      navigate('/forum')
+     }
       }
 
       const getComments = async(e) => {

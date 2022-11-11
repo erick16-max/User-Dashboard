@@ -62,7 +62,7 @@ const ForumItem = ({ data, key}) => {
                     <div id={data.id} style={{display:commentDisplay}} className='flex-row'>
                         <form id={data.id} onSubmit={handleCommentPost}>
                             <input type="text" className="focus:outline-none hover:border-none" placeholder="comment here.." name="comment" id={data.id} />
-                            <button id={data.id} style={{color:"#00BFFF", fontSize:"24px"}} className='font-bold' type="submit"><BiSend /></button>
+                            <button id={data.id} style={{color:"#00BFFF", fontSize:"24px"}}  className='font-bold' type="submit"><BiSend /></button>
                         </form>
                     </div>
                 </div>
