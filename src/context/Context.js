@@ -1,6 +1,8 @@
 import {createContext, useState, useEffect} from 'react'
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+
 
 const AppContext = createContext()
 
@@ -56,7 +58,13 @@ export const AppContextProvider = ({children}) => {
                 const data = await response.json()
                 //console.log(data)
                 if(response.status === 200){
-                    alert(`${username}, You were registered successfully`)
+                    // alert(`${username}, You were registered successfully`)
+                    toast("We've successfully created your account", {
+                      position: "top-center",
+                      type: "success",
+                      closeOnClick: true,
+                      progress: null,
+                  });
                     navigate("/login")
                     
                 }else{
@@ -99,7 +107,12 @@ export const AppContextProvider = ({children}) => {
         localStorage.setItem("tokens", JSON.stringify(data))
 
         if(user.is_staff === true){
-
+          toast("We've successfully logged in", {
+            position: "top-center",
+            type: "success",
+            closeOnClick: true,
+            progress: null,
+        });
             navigate("/")
         }else{
             navigate("/user")
@@ -173,10 +186,42 @@ export const AppContextProvider = ({children}) => {
 
       
 
+      const handleCommentPost = async(e) => {
+        e.preventDefault()
+      const response = await fetch(`http://127.0.0.1:8000/api/forum/${e.target.id}/create-comment/`,{
+              method:'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  "Authorization": "Bearer " + String(tokens.access)
+              },
+              body:JSON.stringify({'comment': e.target.comment.value})
+
+      })
+      const data = await response.json()
+      }
+
+      const getComments = async(e) => {
+        e.preventDefault()
+      const response = await fetch(`http://127.0.0.1:8000/api/forum/${e.target.id}/comments/`,{
+              method:'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  "Authorization": "Bearer " + String(tokens.access)
+              }
+              
+      })
+      const data = await response.json()
+      console.log(data);
+      }
+
+      useEffect(() => {
+        getComments()
+      }, [])
+
 
 
     const contextData = {
-        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums
+        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums, handleCommentPost
     }
     return (
         <AppContext.Provider value={contextData}>
