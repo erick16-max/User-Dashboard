@@ -6,6 +6,7 @@ import "./Forums.css";
 import ForumItem from "../components/forums/ForumItem";
 import AppContext from "../context/Context";
 
+
 const Forum = () => {
    const {forums} = useContext(AppContext)
 //    console.log(forums);
@@ -18,6 +19,7 @@ const Forum = () => {
             {forums.map((item) => (
                 <ForumItem data={item} key={item.id} />
             ))}
+        
         </div>
     );
 };

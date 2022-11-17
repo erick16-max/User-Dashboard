@@ -16,6 +16,8 @@ export const AppContextProvider = ({children}) => {
     const [error, setError] = useState(null);
     const [polls, setPolls] = useState([])
     const [forums, setForums] = useState([])
+    const [comments, setComments] = useState([])
+
 
 
     const navigate = useNavigate();
@@ -56,7 +58,7 @@ export const AppContextProvider = ({children}) => {
                     })
                 response ? setIsLoading(false) : setIsLoading(true)
                 const data = await response.json()
-                //console.log(data)
+               
                 if(response.status === 200){
                     // alert(`${username}, You were registered successfully`)
                     toast("We've successfully created your account", {
@@ -80,7 +82,7 @@ export const AppContextProvider = ({children}) => {
             alert("please enter all fields")
         }
 
-        // console.log(username, email, password1, password2)
+       
     }
 
     //login a user
@@ -88,7 +90,7 @@ export const AppContextProvider = ({children}) => {
         e.preventDefault();
 
         setIsLoading(true)
-        //console.log(isloading)
+      
        try {
         const response = await fetch("http://127.0.0.1:8000/api/token/", {
             method:'POST',
@@ -151,7 +153,7 @@ export const AppContextProvider = ({children}) => {
     
         const data = await response.json()
         if(response.status === 200) {
-          setPolls([...data])
+          setPolls(data)
           
         }else if(response.statusText === "Unauthorized"){
           logoutUser();
@@ -168,7 +170,7 @@ export const AppContextProvider = ({children}) => {
     
         const data = await response.json()
         if(response.status === 200) {
-          setForums([...data])
+          setForums(data)
           
         }else if(response.statusText === "Unauthorized"){
           logoutUser();
@@ -185,48 +187,20 @@ export const AppContextProvider = ({children}) => {
       }, [forums])
 
       
+ 
 
-      const handleCommentPost = async(e) => {
-        e.preventDefault()
-      const response = await fetch(`http://127.0.0.1:8000/api/forum/${e.target.id}/create-comment/`,{
-              method:'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-                  "Authorization": "Bearer " + String(tokens.access)
-              },
-              body:JSON.stringify({'comment': e.target.comment.value})
+      
 
-      })
-      const data = await response.json()
-     if(response.status === 200){
-      alert('commented')
-      navigate('/forum')
-     }
-      }
 
-      const getComments = async(e) => {
-        e.preventDefault()
-      const response = await fetch(`http://127.0.0.1:8000/api/forum/${e.target.id}/comments/`,{
-              method:'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  "Authorization": "Bearer " + String(tokens.access)
-              }
-              
-      })
-      const data = await response.json()
-      console.log(data);
-      }
-
-      useEffect(() => {
-        getComments()
-      }, [])
 
 
 
     const contextData = {
-        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums, handleCommentPost
+        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums, comments, setComments
     }
+
+
+
     return (
         <AppContext.Provider value={contextData}>
             {children}

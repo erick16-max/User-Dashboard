@@ -12,6 +12,8 @@ import Comments from './Comments'
 import Notifications from './Notifications';
 import Community from './Community';
 import Poll from './Poll';
+import ForumComment from '../components/forums/ForumComment';
+
 
 const Home = () => {
   
@@ -48,6 +50,7 @@ const Home = () => {
               <Route path='/notifications' element={<Notifications /> } />
               <Route path='/community' element={<Community /> } />
               <Route path='/poll' element={<Poll /> } />
+              <Route path='/forumcomments' element={<ForumComment />} />
 
             </Routes>
           </div>

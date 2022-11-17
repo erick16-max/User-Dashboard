@@ -27,7 +27,6 @@ const CreateForums = () => {
         })
 
         const data = await response.json()
-        console.log(data);
         if(response.status === 201){
             alert("Forum created successfully")
             navigate("/")
