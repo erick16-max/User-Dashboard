@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const CreatePoll = () => {
 
     const [question, setQuestion] = useState('');
-    const {tokens} = useContext(AppContext)
+    const {tokens, BASE_URL} = useContext(AppContext)
 
     const navigate = useNavigate()
     
@@ -16,7 +16,7 @@ const CreatePoll = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-        const response = await fetch(`http://127.0.0.1:8000/api/create-question/`, {
+        const response = await fetch(`${BASE_URL}/api/create-question/`, {
             method:"POST",
             headers: {
                 'Content-Type': 'application/json',

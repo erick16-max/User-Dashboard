@@ -10,14 +10,14 @@ import { FaUserAlt } from "react-icons/fa";
 const ForumComment = () => {
     const [comments, setComments] = useState([])
     const [commentField, setCommentField] = useState("")
-    const {tokens} = useContext(AppContext)
+    const {tokens, BASE_URL} = useContext(AppContext)
     const {state} = useLocation()
     const navigate = useNavigate()
 
 
     const getComments = async() => {
        
-      const response = await fetch(`http://127.0.0.1:8000/api/forum/${state.id}/comments/`,{
+      const response = await fetch(`${BASE_URL}/api/forum/${state.id}/comments/`,{
               method:'GET',
               headers: {
                   'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const ForumComment = () => {
     
       const handleCommentPost = async(e) => {
         e.preventDefault()
-     const response =  await fetch(`http://127.0.0.1:8000/api/forum/${state.id}/create-comment/`,{
+     const response =  await fetch(`${BASE_URL}/api/forum/${state.id}/create-comment/`,{
               method:'POST',
               headers: {
                   'Content-Type': 'application/json',

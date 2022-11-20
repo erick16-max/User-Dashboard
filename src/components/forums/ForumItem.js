@@ -5,7 +5,7 @@ import AppContext from "../../context/Context";
 import { useNavigate } from "react-router-dom";
 
 const ForumItem = ({ data, key}) => {
-    const {tokens} = useContext(AppContext)
+    const {tokens,BASE_URL} = useContext(AppContext)
     const [votes, setVotes] = useState(null)
    const [upvote, setUpVote] = useState(null)
    const [downvote, setDownVote] = useState(null)
@@ -32,7 +32,7 @@ const ForumItem = ({ data, key}) => {
 
     const handleUpvote = async() => {
        
-        const response = await fetch(`http://127.0.0.1:8000/api/forum/${data.id}/post-vote/`, {
+        const response = await fetch(`${BASE_URL}/api/forum/${data.id}/post-vote/`, {
             method:"POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const ForumItem = ({ data, key}) => {
       }
       
       const handleDownvote = async(e) => {
-        const response = await fetch(`http://127.0.0.1:8000/api/forum/${data.id}/post-vote/`, {
+        const response = await fetch(`${BASE_URL}/api/forum/${data.id}/post-vote/`, {
             method:"POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const ForumItem = ({ data, key}) => {
     
       const getComments = async() => {
        
-        const response = await fetch(`http://127.0.0.1:8000/api/forum/${data.id}/comments/`,{
+        const response = await fetch(`${BASE_URL}/api/forum/${data.id}/comments/`,{
                 method:'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -93,9 +93,10 @@ const ForumItem = ({ data, key}) => {
         useEffect(() => {
           getComments()
         }, [comments])
+
         const getVotes = async() => {
        
-            const response = await fetch(`http://127.0.0.1:8000/api/forum/${data.id}/votes/`,{
+            const response = await fetch(`${BASE_URL}/api/forum/${data.id}/votes/`,{
                     method:'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ const ForumItem = ({ data, key}) => {
         var totalVotes = votes ? votes : [] 
         var commentCount = comments ? comments : []
         
-         const upvotes = totalVotes ? totalVotes.filter(vote => vote.up_vote === 1) : []
+        const upvotes = totalVotes ? totalVotes.filter(vote => vote.up_vote === 1) : []
         const downvotes = totalVotes ? totalVotes.filter(vote => vote.down_vote === 1) : []
 
         // // useEffect(() => {

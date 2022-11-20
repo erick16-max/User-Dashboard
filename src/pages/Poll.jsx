@@ -5,7 +5,7 @@ import AppContext from "../context/Context";
 import { useContext, useState } from "react";
 
 const Poll = () => {
-   const {polls, user, tokens} = useContext(AppContext)
+   const {polls, user, tokens,BASE_URL} = useContext(AppContext)
    const [vote, setVote] = useState('')
 //    console.log(polls);
 
@@ -14,7 +14,7 @@ const Poll = () => {
         setVote(e.target.value)
     
       
-    const response = await fetch(`http://127.0.0.1:8000/api/question/${id}/choice/`,{
+    const response = await fetch(`${BASE_URL}/api/question/${id}/choice/`,{
       method:"POST",
       headers: {
         'Content-Type': 'application/json',

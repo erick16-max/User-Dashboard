@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 const CreateForums = () => {
 
-    const {tokens} = useContext(AppContext)
+    const {tokens,BASE_URL} = useContext(AppContext)
     const navigate = useNavigate()
 
     const handleSubmitForum = async (e) => {
@@ -14,7 +14,7 @@ const CreateForums = () => {
         const title = e.target.title.value
         const text = e.target.text.value
         
-        const response = await fetch(`http://127.0.0.1:8000/api/create-forum/`, {
+        const response = await fetch(`${BASE_URL}/api/create-forum/`, {
             method:"POST",
             headers: {
                 'Content-Type': 'application/json',

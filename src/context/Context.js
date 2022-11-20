@@ -17,6 +17,7 @@ export const AppContextProvider = ({children}) => {
     const [polls, setPolls] = useState([])
     const [forums, setForums] = useState([])
     const [comments, setComments] = useState([])
+    const BASE_URL = 'https://paza-app.herokuapp.com'
 
 
 
@@ -38,7 +39,7 @@ export const AppContextProvider = ({children}) => {
 
         if (username && email && password1 && password2){
             if(password1 === password2){
-                const response = await fetch("http://127.0.0.1:8000/api/signup/", {
+                const response = await fetch(BASE_URL+"/api/signup/", {
                     method:'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const AppContextProvider = ({children}) => {
         setIsLoading(true)
       
        try {
-        const response = await fetch("http://127.0.0.1:8000/api/token/", {
+        const response = await fetch(BASE_URL+"/api/token/", {
             method:'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +145,7 @@ export const AppContextProvider = ({children}) => {
 
     //getting all questions/polls
     const getPolls = async () => {
-        const response = await fetch("http://127.0.0.1:8000/api/questions/",{
+        const response = await fetch(BASE_URL+"/api/questions/",{
           method:"GET",
           headers: {
             "Authorization": "Bearer " + String(tokens.access)
@@ -161,7 +162,7 @@ export const AppContextProvider = ({children}) => {
       }
 
       const getForums = async () => {
-        const response = await fetch("http://127.0.0.1:8000/api/forums/",{
+        const response = await fetch(BASE_URL+"/api/forums/",{
           method:"GET",
           headers: {
             "Authorization": "Bearer " + String(tokens.access)
@@ -196,7 +197,7 @@ export const AppContextProvider = ({children}) => {
 
 
     const contextData = {
-        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums, comments, setComments
+        registerUser, loginUser, user, tokens, logoutUser, isloading,polls, forums, comments, setComments, BASE_URL
     }
 
 
